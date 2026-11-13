@@ -13,6 +13,7 @@ class CurrentWeather {
     required this.humidity,
     required this.weatherCode,
     required this.isDay,
+    this.precipitation,
   });
 
   factory CurrentWeather.fromJson(Map<String, dynamic> json) {
@@ -26,6 +27,7 @@ class CurrentWeather {
       humidity: (current['relative_humidity_2m'] as num).round(),
       weatherCode: (current['weather_code'] as num).toInt(),
       isDay: (current['is_day'] as num?) != 0,
+      precipitation: (current['precipitation'] as num?)?.toDouble(),
     );
   }
 
@@ -35,6 +37,9 @@ class CurrentWeather {
   final int humidity;
   final int weatherCode;
   final bool isDay;
+
+  /// Rain + showers + snow (mm) in the current interval; null when missing.
+  final double? precipitation;
 }
 
 class HourlyPoint {
@@ -45,6 +50,7 @@ class HourlyPoint {
     required this.precipitationProbability,
     required this.weatherCode,
     required this.isDay,
+    this.precipitation,
   });
 
   final DateTime time;
@@ -55,6 +61,9 @@ class HourlyPoint {
   final int? precipitationProbability;
   final int weatherCode;
   final bool isDay;
+
+  /// Precipitation (mm) during the preceding hour; null when missing.
+  final double? precipitation;
 }
 
 class DailySummary {
@@ -66,6 +75,7 @@ class DailySummary {
     required this.avgHumidity,
     required this.weatherCode,
     required this.hours,
+    this.totalPrecipitation,
   });
 
   final DateTime date;
@@ -73,6 +83,9 @@ class DailySummary {
   final double tempMin;
   final int avgPrecipitationProbability;
   final int avgHumidity;
+
+  /// Sum of the hourly precipitation (mm); null when no hour has a value.
+  final double? totalPrecipitation;
 
   /// Most frequent WMO code among the day's hours.
   final int weatherCode;
@@ -115,6 +128,7 @@ class WeatherForecast {
         temperature: current.temperature,
         humidity: current.humidity,
         precipitationProbability: first.precipitationProbability,
+        precipitation: first.precipitation,
         weatherCode: current.weatherCode,
         isDay: current.isDay,
       ),
@@ -128,6 +142,7 @@ List<HourlyPoint> parseHourly(Map<String, dynamic> hourly) {
   final temps = hourly['temperature_2m'] as List;
   final humidity = hourly['relative_humidity_2m'] as List;
   final rain = hourly['precipitation_probability'] as List?;
+  final amount = hourly['precipitation'] as List?;
   final codes = hourly['weather_code'] as List;
   final isDay = hourly['is_day'] as List?;
 
@@ -143,6 +158,7 @@ List<HourlyPoint> parseHourly(Map<String, dynamic> hourly) {
         precipitationProbability: (rain?[i] as num?)?.round(),
         weatherCode: (codes[i] as num).toInt(),
         isDay: (isDay?[i] as num?) != 0,
+        precipitation: (amount?[i] as num?)?.toDouble(),
       ),
     );
   }
@@ -185,6 +201,7 @@ List<DailySummary> buildDailySummaries(
           for (final h in hours) ?h.precipitationProbability,
         ]),
         avgHumidity: _mean([for (final h in hours) h.humidity]),
+        totalPrecipitation: sumPrecipitation(hours),
         weatherCode: dominantWeatherCode([
           for (final h in hours) h.weatherCode,
         ]),
@@ -193,6 +210,15 @@ List<DailySummary> buildDailySummaries(
     );
   }
   return summaries;
+}
+
+/// Total precipitation (mm) of [hours], ignoring missing values.
+/// Null when no hour has a value.
+double? sumPrecipitation(List<HourlyPoint> hours) {
+  final values = [for (final h in hours) ?h.precipitation];
+  if (values.isEmpty) return null;
+  // Round to 0.1 mm to drop floating-point noise from the sum.
+  return (values.reduce((a, b) => a + b) * 10).round() / 10;
 }
 
 /// Most frequent code; ties go to the highest (most severe) code.

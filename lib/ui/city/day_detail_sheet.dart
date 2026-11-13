@@ -6,6 +6,7 @@ import '../../core/weather_codes.dart';
 import '../../data/models/weather.dart';
 import '../widgets/glass_controls.dart';
 import '../widgets/glass_surfaces.dart';
+import '../widgets/hourly_chart.dart';
 import '../widgets/weather_widgets.dart';
 import 'city_page.dart' show MinMaxReadout;
 
@@ -102,6 +103,14 @@ class _DayDetailSheet extends StatelessWidget {
                           color: GlassColors.ink,
                         ),
                         MetricChip(
+                          icon: Icons.water_drop,
+                          value:
+                              'Chuva total '
+                              '${formatRainAmount(day.totalPrecipitation)}',
+                          semanticLabel: '',
+                          color: GlassColors.ink,
+                        ),
+                        MetricChip(
                           icon: Icons.opacity,
                           value: 'Umidade média ${day.avgHumidity}%',
                           semanticLabel: '',
@@ -115,6 +124,17 @@ class _DayDetailSheet extends StatelessWidget {
                     GlassWell(
                       padding: EdgeInsets.zero,
                       child: HourlyStrip(points: day.hours),
+                    ),
+                    const SizedBox(height: 12),
+                    // A well, not a panel: no nested BackdropFilter.
+                    GlassWell(
+                      child: HourlyChart(
+                        points: day.hours,
+                        height: 200,
+                        semanticsTitle:
+                            'Gráfico hora a hora de '
+                            '${formatDayLong(day.date, today)}',
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Center(

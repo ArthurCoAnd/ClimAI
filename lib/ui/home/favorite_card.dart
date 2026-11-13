@@ -105,13 +105,27 @@ class FavoriteCard extends StatelessWidget {
                           icon: Icons.refresh,
                           onTap: onRetry,
                         )
-                      : MetricChip(
-                          icon: Icons.opacity,
-                          value: weather == null
-                              ? 'Umidade –'
-                              : 'Umidade ${weather.humidity}%',
-                          semanticLabel: '',
-                          color: GlassColors.ink,
+                      : Wrap(
+                          spacing: 16,
+                          runSpacing: 8,
+                          children: [
+                            MetricChip(
+                              icon: Icons.opacity,
+                              value: weather == null
+                                  ? 'Umidade –'
+                                  : 'Umidade ${weather.humidity}%',
+                              semanticLabel: '',
+                              color: GlassColors.ink,
+                            ),
+                            MetricChip(
+                              icon: Icons.water_drop,
+                              value: weather == null
+                                  ? 'Chuva –'
+                                  : 'Chuva ${formatRainAmount(weather.precipitation)}',
+                              semanticLabel: '',
+                              color: GlassColors.ink,
+                            ),
+                          ],
                         ),
                 ),
               ),

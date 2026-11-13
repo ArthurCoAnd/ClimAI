@@ -29,6 +29,8 @@ Cor principal: `Colors.amber`.
 | `inkMuted` | `#FFF0CF` | texto secundário |
 | `accent` | `Colors.amber.shade300` | estrela de favorito, sol, "Agora", máxima, cursor, anel de foco |
 | `rain` | `#B3E5FF` | chuva / probabilidade, mínima |
+| `chartTemperature` / `chartRainAmount` / `chartRainChance` | `amber.shade400` / `lightBlue.shade300` / `grey.shade300` | séries do gráfico horário: área, barras, linha tracejada (validadas para daltonismo no vidro escuro) |
+| `chartGrid` | branco 12% | linhas de grade do gráfico |
 | `danger` | `#FFCDC4` | erros |
 | `handle` | branco 40% | alça do bottom sheet |
 
@@ -47,7 +49,7 @@ sempre claro (`ink`). Nunca usar hex cru nos widgets: sempre os tokens.
 ## Forma e espaçamento
 - Raio: 24 (painéis/cards), 16 (poços, campo de busca), circular (botões de ícone, glifos).
 - Grade de 4: espaçamentos 4 / 8 / 12 / 16 / 24.
-- Margem lateral das telas: 16. Largura máxima de conteúdo: 640 (centralizado em telas largas).
+- Margem lateral das telas: 16. Largura máxima de conteúdo: 640 (centralizado em telas largas por padding lateral — `ContentLayout`; as áreas roláveis ocupam a largura total para a barra de rolagem ficar na borda da tela).
 
 ## Tipografia
 Fonte do sistema (Roboto). Números com `FontFeature.tabularFigures()`.
@@ -81,14 +83,15 @@ Material Icons (`Icons.*`), nunca emoji. Um ícone por código WMO, com variaç�
 | `GlassButton` | botão de vidro com rótulo |
 | `GlassNotice` | painel com ícone, mensagem e ação (estados vazio/erro) |
 | `WeatherGlyph` | ícone de clima em poço circular |
-| `MetricChip` | ícone + valor (umidade, chuva) |
+| `MetricChip` | ícone + valor (umidade, chance de chuva `umbrella`, precipitação em mm `water_drop`) |
 | `HourlyStrip` | faixa horizontal de fichas horárias (página e painel do dia) |
+| `HourlyChart` | gráfico horário (página do município e painel do dia): área de temperatura (eixo esquerdo), barras de mm e linha tracejada de % (eixos direitos), legenda e balão ao tocar/passar o mouse |
 
 ## Telas
 ### Home
 Cabeçalho com o nome do app e botão de busca de vidro. Lista de `GlassCard`:
 à esquerda `WeatherGlyph`; ao centro município/UF e descrição; à direita um `GlassWell`
-com a temperatura; rodapé com umidade e botão remover.
+com a temperatura; rodapé com umidade, chuva (mm) e botão remover.
 Estado vazio: `GlassNotice` com ícone, texto e `GlassButton` "Buscar município".
 
 ### Busca
@@ -97,12 +100,15 @@ estrela (`accent`, preenchida, quando favorito).
 
 ### Município
 1. `GlassCard` herói: `WeatherGlyph` grande, temperatura em `display` dentro de um poço,
-   descrição, umidade e sensação térmica.
-2. "Próximas 24 horas": `HourlyStrip` dentro de um `GlassPanel`.
+   descrição, umidade, chuva (mm) e sensação térmica.
+2. "Próximas 24 horas": `HourlyStrip` dentro de um `GlassPanel`; logo abaixo, `HourlyChart`
+   em outro `GlassPanel` (padding 16). Rótulos de eixo em `inkMuted` 11 px; marcas finas
+   (linhas 2 px, barras até 12 px com topo arredondado 4 px).
 3. "Próximos 7 dias": 7 `GlassCard` tocáveis com chevron indicando que abrem detalhe.
 
 ### Painel do dia
-Bottom sheet de vidro com alça, título do dia, resumo máx/mín e `HourlyStrip` do dia.
+Bottom sheet de vidro com alça, título do dia, resumo máx/mín, `HourlyStrip` do dia e,
+abaixo, `HourlyChart` do dia dentro de um `GlassWell` (altura 200; sem blur aninhado).
 
 ## Acessibilidade
 - Contraste ≥ 4.5:1 do texto `ink`/`inkMuted`/`accent`/`rain` sobre o vidro, inclusive sobre as manchas

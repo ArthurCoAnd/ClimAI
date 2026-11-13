@@ -13,6 +13,7 @@ void main() {
       expect(forecast.current.humidity, 64);
       expect(forecast.current.weatherCode, 2);
       expect(forecast.current.isDay, isTrue);
+      expect(forecast.current.precipitation, 0.2);
     });
 
     test('next24Hours has 24 points starting at the current hour', () {
@@ -41,6 +42,9 @@ void main() {
       expect(third.tempMin, closeTo(20.6, 1e-9));
       expect(third.avgPrecipitationProbability, 20);
       expect(third.avgHumidity, 52);
+      // 24 hours × 0.2 mm.
+      expect(third.totalPrecipitation, 4.8);
+      expect(forecast.daily.first.totalPrecipitation, 0);
     });
 
     test('daily status is the most frequent hourly code', () {
@@ -79,6 +83,26 @@ void main() {
     expect(daily.single.avgHumidity, 85);
   });
 
+  group('sumPrecipitation', () {
+    HourlyPoint hour(double? mm) => HourlyPoint(
+      time: DateTime(2026, 11, 11),
+      temperature: 20,
+      humidity: 80,
+      precipitationProbability: null,
+      weatherCode: 61,
+      isDay: true,
+      precipitation: mm,
+    );
+
+    test('adds the hours, ignoring missing values', () {
+      expect(sumPrecipitation([hour(0.1), hour(null), hour(0.2)]), 0.3);
+    });
+
+    test('is null when no hour has a value', () {
+      expect(sumPrecipitation([hour(null)]), isNull);
+    });
+  });
+
   group('formatters', () {
     final today = DateTime(2026, 11, 11, 14, 30);
 
@@ -86,6 +110,13 @@ void main() {
       expect(formatDay(DateTime(2026, 11, 11), today), 'Hoje');
       expect(formatDay(DateTime(2026, 11, 12), today), 'Amanhã');
       expect(formatDay(DateTime(2026, 11, 13), today), 'Sex, 13/11');
+    });
+
+    test('formatRainAmount', () {
+      expect(formatRainAmount(2.4), '2,4 mm');
+      expect(formatRainAmount(12), '12 mm');
+      expect(formatRainAmount(0.04), '0 mm');
+      expect(formatRainAmount(null), '– mm');
     });
 
     test('formatTemp rounds and never shows -0', () {

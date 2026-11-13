@@ -96,6 +96,8 @@ void main() {
         requested.queryParameters['hourly'],
         contains('precipitation_probability'),
       );
+      expect(requested.queryParameters['hourly'], contains(',precipitation,'));
+      expect(requested.queryParameters['current'], contains('precipitation'));
       expect(forecast.next24Hours, hasLength(24));
       expect(forecast.daily, hasLength(7));
     });

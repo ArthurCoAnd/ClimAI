@@ -53,10 +53,11 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: GlassBackground(
         child: SafeArea(
-          child: ContentWidth(
-            child: Column(
+          child: ContentLayout(
+            builder: (context, side) => Column(
               children: [
                 PageHeader(
+                  sidePadding: side,
                   title: 'ClimAI',
                   subtitle: 'Municípios favoritos',
                   actions: [
@@ -77,18 +78,14 @@ class HomePage extends StatelessWidget {
                       final cities = favorites.favorites;
                       if (cities.isEmpty) {
                         return _EmptyState(
+                          sidePadding: side,
                           onSearch: () => _openSearch(context),
                         );
                       }
                       return RefreshIndicator(
                         onRefresh: favorites.refreshAll,
                         child: ListView.separated(
-                          padding: const EdgeInsets.fromLTRB(
-                            GlassMetrics.screenMargin,
-                            4,
-                            GlassMetrics.screenMargin,
-                            32,
-                          ),
+                          padding: EdgeInsets.fromLTRB(side, 4, side, 32),
                           itemCount: cities.length,
                           separatorBuilder: (_, _) =>
                               const SizedBox(height: 16),
@@ -118,14 +115,18 @@ class HomePage extends StatelessWidget {
 }
 
 class _EmptyState extends StatelessWidget {
-  const _EmptyState({required this.onSearch});
+  const _EmptyState({required this.onSearch, required this.sidePadding});
 
   final VoidCallback onSearch;
+  final double sidePadding;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(GlassMetrics.screenMargin),
+      padding: EdgeInsets.symmetric(
+        horizontal: sidePadding,
+        vertical: GlassMetrics.screenMargin,
+      ),
       child: GlassNotice(
         icon: Icons.travel_explore,
         message:

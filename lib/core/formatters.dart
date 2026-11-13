@@ -17,6 +17,18 @@ String formatTemp(double celsius) => '${celsius.round()}°';
 
 String formatPercent(int? value) => value == null ? '–' : '$value%';
 
+/// "2,4", "12", "0": one decimal with a PT-BR comma, ",0" dropped.
+String formatDecimal(double value) {
+  final tenths = (value * 10).round();
+  final whole = tenths ~/ 10;
+  final decimal = tenths % 10;
+  return decimal == 0 ? '$whole' : '$whole,$decimal';
+}
+
+/// "2,4 mm", "12 mm", "0 mm".
+String formatRainAmount(double? mm) =>
+    mm == null ? '– mm' : '${formatDecimal(mm)} mm';
+
 /// "14h"
 String formatHour(DateTime time) => '${time.hour.toString().padLeft(2, '0')}h';
 

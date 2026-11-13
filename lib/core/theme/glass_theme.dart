@@ -37,6 +37,13 @@ abstract final class GlassColors {
   static const Color danger = Color(0xFFFFCDC4);
 
   static const Color handle = Color(0x66FFFFFF);
+
+  // Hourly chart series, validated for color-vision deficiency on the dark
+  // glass. Each also has its own mark type (area / bars / dashed line).
+  static final Color chartTemperature = Colors.amber.shade400;
+  static final Color chartRainAmount = Colors.lightBlue.shade300;
+  static final Color chartRainChance = Colors.grey.shade300;
+  static const Color chartGrid = Color(0x1FFFFFFF); // white 12%
 }
 
 abstract final class GlassGradients {

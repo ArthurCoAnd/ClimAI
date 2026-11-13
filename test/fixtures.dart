@@ -14,13 +14,15 @@ String _two(int n) => n.toString().padLeft(2, '0');
 /// data starting 2026-11-11T00:00, with "now" at 14:30 on the first day.
 ///
 /// Per hour: temperature = hour of day, humidity = 50 + day index,
-/// rain probability = 10 × day index, weather code 3 (61 from 18h on day 0).
+/// rain probability = 10 × day index, precipitation = 0.1 mm × day index,
+/// weather code 3 (61 from 18h on day 0).
 Map<String, dynamic> forecastJson() {
   final start = DateTime(2026, 11, 11);
   final times = <String>[];
   final temps = <num>[];
   final humidity = <num>[];
   final rain = <num>[];
+  final amount = <num>[];
   final codes = <num>[];
   final isDay = <num>[];
   for (var day = 0; day < 8; day++) {
@@ -30,6 +32,7 @@ Map<String, dynamic> forecastJson() {
       temps.add(hour.toDouble());
       humidity.add(50 + day);
       rain.add(10 * day);
+      amount.add(0.1 * day);
       codes.add(day == 0 && hour >= 18 ? 61 : 3);
       isDay.add(hour >= 6 && hour < 18 ? 1 : 0);
     }
@@ -41,6 +44,7 @@ Map<String, dynamic> forecastJson() {
       'temperature_2m': temps,
       'relative_humidity_2m': humidity,
       'precipitation_probability': rain,
+      'precipitation': amount,
       'weather_code': codes,
       'is_day': isDay,
     },
@@ -64,6 +68,7 @@ Map<String, dynamic> currentJson() => {
     'temperature_2m': 27.6,
     'relative_humidity_2m': 64,
     'apparent_temperature': 29.1,
+    'precipitation': 0.2,
     'weather_code': 2,
     'is_day': 1,
   },

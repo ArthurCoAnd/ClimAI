@@ -16,3 +16,7 @@ Uma task por arquivo, executadas em ordem. Status: `pending` → `in_progress` �
 | 10 | [Testes e verificação](10-testes-verificacao.md) |
 | 11 | [Trocar a cor do tema para âmbar](11-tema-ambar.md) |
 | 12 | [Trocar o estilo de UI para Glassmorphism](12-glassmorphism.md) |
+| 13 | [Barra de rolagem na borda da tela](13-barra-rolagem-borda.md) |
+| 14 | [Precipitação em mm nos cards](14-precipitacao-mm.md) |
+| 15 | [Gráfico das próximas 24 horas](15-grafico-24h.md) |
+| 16 | [Gráfico no painel do dia](16-grafico-painel-dia.md) |

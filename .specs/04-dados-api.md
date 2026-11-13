@@ -25,8 +25,8 @@ Resposta: `results[]` (ausente quando não há resultado) com `id`, `name`, `lat
 | `latitude`, `longitude` | do município |
 | `timezone` | `auto` |
 | `forecast_days` | `8` (garante 24h à frente e 7 dias completos) |
-| `current` | `temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,is_day` |
-| `hourly` | `temperature_2m,relative_humidity_2m,precipitation_probability,weather_code,is_day` |
+| `current` | `temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,is_day` |
+| `hourly` | `temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,weather_code,is_day` |
 | `daily` | `temperature_2m_max,temperature_2m_min` |
 
 ### Clima atual (cards da Home)
@@ -40,10 +40,15 @@ Cliente implementado (`ArchiveApi`), **não usado na interface** nesta versão.
 
 ## Modelos
 - `City { id, name, admin1, latitude, longitude }` — serializável em JSON.
-- `CurrentWeather { time, temperature, apparentTemperature, humidity, weatherCode, isDay }`
-- `HourlyPoint { time, temperature, humidity, precipitationProbability, weatherCode, isDay }`
-- `DailySummary { date, tempMax, tempMin, avgPrecipitationProbability, avgHumidity, weatherCode, hours[] }`
+- `CurrentWeather { time, temperature, apparentTemperature, humidity, weatherCode, isDay, precipitation? }`
+- `HourlyPoint { time, temperature, humidity, precipitationProbability, weatherCode, isDay, precipitation? }`
+- `DailySummary { date, tempMax, tempMin, avgPrecipitationProbability, avgHumidity, totalPrecipitation?, weatherCode, hours[] }`
+
+`precipitation` é a precipitação em mm (chuva + pancadas + neve) do intervalo anterior
+(no `current`, o intervalo atual; no `hourly`, a hora anterior). Nulo quando ausente.
 - `WeatherForecast { current, hourly[], daily[] }` com `next24Hours` derivado.
+
+Exibição em mm com uma casa decimal e vírgula, sem ",0" (`2,4 mm`, `12 mm`, `0 mm`; ausente: `– mm`).
 
 Horários vêm em hora local do município (`timezone=auto`, formato `yyyy-MM-ddTHH:mm`)
 e são tratados como "hora de parede", sem conversão de fuso.
@@ -56,6 +61,7 @@ Para cada um dos 7 primeiros dias de `daily.time`:
 - **Máxima / mínima**: `daily.temperature_2m_max/min`.
 - **Probabilidade média de chuva**: média aritmética de `precipitation_probability` das horas do dia (nulos ignorados), arredondada.
 - **Umidade média**: média aritmética de `relative_humidity_2m` das horas do dia, arredondada.
+- **Precipitação total (mm)**: soma de `precipitation` das horas do dia (nulos ignorados), arredondada a 0,1 mm; nula se nenhuma hora tiver valor.
 - **Status médio**: código WMO mais frequente (moda) entre as horas do dia; em empate, o código mais alto (mais severo).
 - **hours**: os pontos horários do dia, usados no painel do dia.
 

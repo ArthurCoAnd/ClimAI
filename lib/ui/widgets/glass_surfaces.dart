@@ -62,22 +62,28 @@ class _BlobPainter extends CustomPainter {
   bool shouldRepaint(_BlobPainter oldDelegate) => false;
 }
 
-/// Centers content and caps its width on large screens.
-class ContentWidth extends StatelessWidget {
-  const ContentWidth({super.key, required this.child});
+/// Side padding that centers content of at most
+/// [GlassMetrics.maxContentWidth] inside an area [width] wide, keeping
+/// [GlassMetrics.screenMargin] on each side.
+double contentSidePadding(double width) {
+  final extra = (width - GlassMetrics.maxContentWidth) / 2;
+  return GlassMetrics.screenMargin + (extra > 0 ? extra : 0);
+}
 
-  final Widget child;
+/// Full-width area whose content is centered with a capped width.
+///
+/// Scrollables built inside stay full width so their scrollbar sits at the
+/// screen edge; [builder] receives the side padding to apply to the content.
+class ContentLayout extends StatelessWidget {
+  const ContentLayout({super.key, required this.builder});
+
+  final Widget Function(BuildContext context, double sidePadding) builder;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxWidth: GlassMetrics.maxContentWidth,
-        ),
-        child: child,
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) =>
+          builder(context, contentSidePadding(constraints.maxWidth)),
     );
   }
 }

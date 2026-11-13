@@ -5,7 +5,7 @@ Tela inicial do app. Lista os municípios favoritos, cada um num card com o clim
 ## Requisitos
 - R1. Listar os favoritos na ordem em que foram adicionados.
 - R2. Cada card mostra: nome do município, UF, temperatura atual (°C, inteiro),
-  status do clima (ícone + descrição) e umidade relativa (%).
+  status do clima (ícone + descrição), umidade relativa (%) e precipitação atual (mm).
 - R3. Tocar no card abre a página do município ([03](03-pagina-municipio.md)).
 - R4. Botão visível para abrir a Busca ([02](02-busca.md)).
 - R5. Cada card tem um botão visível para remover o município dos favoritos.

@@ -87,10 +87,11 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       body: GlassBackground(
         child: SafeArea(
-          child: ContentWidth(
-            child: Column(
+          child: ContentLayout(
+            builder: (context, side) => Column(
               children: [
                 PageHeader(
+                  sidePadding: side,
                   title: 'Buscar município',
                   leading: GlassIconButton(
                     icon: Icons.arrow_back,
@@ -99,9 +100,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: GlassMetrics.screenMargin,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: side),
                   child: GlassPanel(
                     borderRadius: BorderRadius.circular(
                       GlassMetrics.wellRadius,
@@ -137,7 +136,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Expanded(child: _buildBody()),
+                Expanded(child: _buildBody(side)),
               ],
             ),
           ),
@@ -146,15 +145,17 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(double side) {
     if (_query.length < _minChars) {
-      return const _Message(
+      return _Message(
+        sidePadding: side,
         icon: Icons.location_city,
         message: 'Digite o nome de um município',
       );
     }
     if (_error) {
       return _Message(
+        sidePadding: side,
         icon: Icons.cloud_off,
         iconColor: GlassColors.danger,
         message: 'Não foi possível buscar. Verifique sua conexão.',
@@ -168,6 +169,7 @@ class _SearchPageState extends State<SearchPage> {
     }
     if (results.isEmpty) {
       return _Message(
+        sidePadding: side,
         icon: Icons.search,
         message: "Nenhum município encontrado para '$_query'",
       );
@@ -177,12 +179,7 @@ class _SearchPageState extends State<SearchPage> {
     return ListenableBuilder(
       listenable: favorites,
       builder: (context, _) => ListView.separated(
-        padding: const EdgeInsets.fromLTRB(
-          GlassMetrics.screenMargin,
-          4,
-          GlassMetrics.screenMargin,
-          32,
-        ),
+        padding: EdgeInsets.fromLTRB(side, 4, side, 32),
         itemCount: results.length,
         separatorBuilder: (_, _) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
@@ -235,6 +232,7 @@ class _Message extends StatelessWidget {
     this.actionLabel,
     this.onAction,
     this.iconColor,
+    required this.sidePadding,
   });
 
   final IconData icon;
@@ -242,13 +240,12 @@ class _Message extends StatelessWidget {
   final String? actionLabel;
   final VoidCallback? onAction;
   final Color? iconColor;
+  final double sidePadding;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: GlassMetrics.screenMargin,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: sidePadding),
       child: GlassNotice(
         icon: icon,
         iconColor: iconColor,

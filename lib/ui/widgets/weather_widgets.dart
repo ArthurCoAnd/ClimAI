@@ -59,6 +59,12 @@ class MetricChip extends StatelessWidget {
       semanticLabel = 'Umidade',
       color = GlassColors.inkMuted;
 
+  MetricChip.rainAmount(double? mm, {super.key})
+    : icon = Icons.water_drop,
+      value = formatRainAmount(mm),
+      semanticLabel = 'Precipitação',
+      color = GlassColors.rain;
+
   const MetricChip.rain(int? percent, {super.key})
     : icon = Icons.umbrella,
       value = percent == null ? '–' : '$percent%',
@@ -127,6 +133,7 @@ class _HourTile extends StatelessWidget {
       label:
           '$time, ${info.label}, ${point.temperature.round()} graus, '
           'chance de chuva ${formatPercent(point.precipitationProbability)}, '
+          'precipitação ${formatRainAmount(point.precipitation)}, '
           'umidade ${point.humidity}%',
       excludeSemantics: true,
       child: Tooltip(
@@ -156,6 +163,8 @@ class _HourTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 MetricChip.rain(point.precipitationProbability),
+                const SizedBox(height: 4),
+                MetricChip.rainAmount(point.precipitation),
                 const SizedBox(height: 4),
                 MetricChip.humidity(point.humidity),
               ],

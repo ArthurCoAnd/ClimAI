@@ -9,6 +9,7 @@ import '../../data/models/weather.dart';
 import '../widgets/page_header.dart';
 import '../widgets/glass_controls.dart';
 import '../widgets/glass_surfaces.dart';
+import '../widgets/hourly_chart.dart';
 import '../widgets/weather_widgets.dart';
 import 'day_detail_sheet.dart';
 
@@ -61,10 +62,11 @@ class _CityPageState extends State<CityPage> {
     return Scaffold(
       body: GlassBackground(
         child: SafeArea(
-          child: ContentWidth(
-            child: Column(
+          child: ContentLayout(
+            builder: (context, side) => Column(
               children: [
                 PageHeader(
+                  sidePadding: side,
                   title: city.name,
                   subtitle: city.admin1,
                   leading: GlassIconButton(
@@ -91,7 +93,7 @@ class _CityPageState extends State<CityPage> {
                     ),
                   ],
                 ),
-                Expanded(child: _buildBody()),
+                Expanded(child: _buildBody(side)),
               ],
             ),
           ),
@@ -100,11 +102,14 @@ class _CityPageState extends State<CityPage> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(double side) {
     final forecast = _forecast;
     if (_error) {
       return SingleChildScrollView(
-        padding: const EdgeInsets.all(GlassMetrics.screenMargin),
+        padding: EdgeInsets.symmetric(
+          horizontal: side,
+          vertical: GlassMetrics.screenMargin,
+        ),
         child: GlassNotice(
           icon: Icons.cloud_off,
           iconColor: GlassColors.danger,
@@ -120,21 +125,25 @@ class _CityPageState extends State<CityPage> {
     }
 
     final today = forecast.current.time;
+    final next24Hours = forecast.next24Hours;
     return RefreshIndicator(
       onRefresh: _load,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          GlassMetrics.screenMargin,
-          4,
-          GlassMetrics.screenMargin,
-          32,
-        ),
+        padding: EdgeInsets.fromLTRB(side, 4, side, 32),
         children: [
           _CurrentCard(current: forecast.current),
           const SectionTitle('Próximas 24 horas'),
           GlassPanel(
             borderRadius: BorderRadius.circular(GlassMetrics.cardRadius),
-            child: HourlyStrip(points: forecast.next24Hours, firstIsNow: true),
+            child: HourlyStrip(points: next24Hours, firstIsNow: true),
+          ),
+          const SizedBox(height: 12),
+          GlassPanel(
+            borderRadius: BorderRadius.circular(GlassMetrics.cardRadius),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: HourlyChart(points: next24Hours, firstIsNow: true),
+            ),
           ),
           const SectionTitle('Próximos 7 dias'),
           for (final day in forecast.daily)
@@ -208,6 +217,12 @@ class _CurrentCard extends StatelessWidget {
                 color: GlassColors.ink,
               ),
               MetricChip(
+                icon: Icons.water_drop,
+                value: 'Chuva ${formatRainAmount(current.precipitation)}',
+                semanticLabel: '',
+                color: GlassColors.ink,
+              ),
+              MetricChip(
                 icon: Icons.thermostat,
                 value: 'Sensação ${formatTemp(current.apparentTemperature)}',
                 semanticLabel: '',
@@ -250,6 +265,7 @@ class _DayCard extends StatelessWidget {
                   runSpacing: 4,
                   children: [
                     MetricChip.rain(day.avgPrecipitationProbability),
+                    MetricChip.rainAmount(day.totalPrecipitation),
                     MetricChip.humidity(day.avgHumidity),
                   ],
                 ),

@@ -10,9 +10,9 @@ class ForecastApi {
   final http.Client _client;
 
   static const _current =
-      'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,is_day';
+      'temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,is_day';
   static const _hourly =
-      'temperature_2m,relative_humidity_2m,precipitation_probability,weather_code,is_day';
+      'temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,weather_code,is_day';
 
   /// Current conditions only (home cards).
   Future<CurrentWeather> fetchCurrent(City city) async {

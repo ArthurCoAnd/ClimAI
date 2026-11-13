@@ -6,6 +6,7 @@ import 'package:clim_ai/data/api/geocoding_api.dart';
 import 'package:clim_ai/data/favorites_store.dart';
 import 'package:clim_ai/main.dart';
 import 'package:clim_ai/state/favorites_controller.dart';
+import 'package:clim_ai/ui/widgets/hourly_chart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -63,6 +64,7 @@ void main() {
     expect(find.text('28°'), findsOneWidget);
     expect(find.text('Parcialmente nublado'), findsOneWidget);
     expect(find.text('Umidade 64%'), findsOneWidget);
+    expect(find.text('Chuva 0,2 mm'), findsOneWidget);
   });
 
   testWidgets('shows an error with retry when the weather fails', (
@@ -106,6 +108,17 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Próximas 24 horas'), findsOneWidget);
+    expect(find.byType(HourlyChart), findsOneWidget);
+    expect(find.text('Chance de chuva (%)'), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (w) =>
+            w is Semantics &&
+            (w.properties.label?.startsWith('Gráfico das próximas 24 horas') ??
+                false),
+      ),
+      findsOneWidget,
+    );
     expect(find.text('Agora'), findsOneWidget);
     // 23 hour labels besides "Agora" (the horizontal strip builds them all).
     expect(find.textContaining(RegExp(r'^\d\dh$')), findsNWidgets(23));
@@ -127,5 +140,23 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('HORA A HORA'), findsOneWidget);
     expect(find.text('Amanhã · Quinta-feira, 12/11'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.byType(HourlyChart),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.byWidgetPredicate(
+        (w) =>
+            w is Semantics &&
+            (w.properties.label?.startsWith(
+                  'Gráfico hora a hora de Amanhã · Quinta-feira, 12/11',
+                ) ??
+                false),
+      ),
+      findsOneWidget,
+    );
   });
 }

@@ -11,6 +11,7 @@ class PageHeader extends StatelessWidget {
     this.subtitle,
     this.leading,
     this.actions = const [],
+    this.sidePadding = GlassMetrics.screenMargin,
   });
 
   final String title;
@@ -18,15 +19,13 @@ class PageHeader extends StatelessWidget {
   final Widget? leading;
   final List<Widget> actions;
 
+  /// Horizontal padding; see `contentSidePadding`.
+  final double sidePadding;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        GlassMetrics.screenMargin,
-        12,
-        GlassMetrics.screenMargin,
-        12,
-      ),
+      padding: EdgeInsets.fromLTRB(sidePadding, 12, sidePadding, 12),
       child: Row(
         children: [
           if (leading != null) ...[leading!, const SizedBox(width: 12)],
