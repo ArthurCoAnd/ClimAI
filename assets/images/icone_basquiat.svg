@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="tile">
+      <rect width="512" height="512" rx="96"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#tile)">
+    <!-- fundo teal -->
+    <rect width="512" height="512" fill="#1cb3b0"/>
+    <!-- blocos azuis e amarelos -->
+    <rect x="250" y="0" width="262" height="290" fill="#2c72c9"/>
+    <rect x="330" y="0" width="182" height="60" fill="#f6c21a"/>
+    <rect x="318" y="60" width="50" height="170" fill="#f6c21a"/>
+    <rect x="290" y="330" width="222" height="182" fill="#f6c21a"/>
+    <rect x="0" y="360" width="230" height="152" fill="#e8e2c4"/>
+
+    <!-- cabeça do pássaro -->
+    <ellipse cx="260" cy="150" rx="105" ry="80" fill="#101010"/>
+    <path d="M330 128 L440 150 L330 182 Z" fill="#101010" stroke="#ffffff" stroke-width="8" stroke-linejoin="round"/>
+    <ellipse cx="300" cy="150" rx="26" ry="16" fill="#ffffff"/>
+    <ellipse cx="300" cy="150" rx="14" ry="9" fill="#d7262e"/>
+
+    <!-- corpo -->
+    <path d="M220 220 L340 220 L370 420 L200 420 Z" fill="#101010"/>
+    <path d="M240 420 L240 500 M290 420 L290 500" stroke="#101010" stroke-width="14" stroke-linecap="round"/>
+
+    <!-- rabiscos brancos -->
+    <g fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round">
+      <circle cx="262" cy="270" r="18"/>
+      <circle cx="302" cy="270" r="18"/>
+      <circle cx="282" cy="310" r="18"/>
+      <circle cx="322" cy="310" r="18"/>
+      <circle cx="242" cy="310" r="18"/>
+      <circle cx="270" cy="352" r="18"/>
+      <circle cx="312" cy="352" r="18"/>
+      <circle cx="352" cy="250" r="18"/>
+      <path d="M140 300 C180 260 200 340 170 360 S120 330 150 300"/>
+    </g>
+
+    <!-- garatuja preta no topo -->
+    <path d="M60 70 L100 34 L120 84 L152 42" fill="none" stroke="#101010" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- setas e caixa vermelha -->
+    <path d="M120 500 L100 380 M140 500 L150 380" stroke="#101010" stroke-width="8" stroke-linecap="round"/>
+    <path d="M100 380 L92 400 M100 380 L114 398 M150 380 L140 400 M150 380 L162 396" stroke="#101010" stroke-width="8" stroke-linecap="round"/>
+    <rect x="30" y="410" width="170" height="50" rx="6" fill="none" stroke="#d7262e" stroke-width="8"/>
+
+    <!-- zigue-zague no bloco amarelo inferior -->
+    <path d="M300 430 l20 -14 l20 14 l20 -14 l20 14 l20 -14 l20 14 l20 -14 l20 14" fill="none" stroke="#101010" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
