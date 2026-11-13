@@ -21,3 +21,4 @@ Uma task por arquivo, executadas em ordem. Status: `pending` → `in_progress` �
 | 15 | [Gráfico das próximas 24 horas](15-grafico-24h.md) |
 | 16 | [Gráfico no painel do dia](16-grafico-painel-dia.md) |
 | 17 | [Assets e ícone do aplicativo](17-icone-app.md) |
+| 18 | [CI/CD: GitHub Pages e Release do APK](18-ci-cd.md) |

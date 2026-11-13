@@ -98,6 +98,22 @@ flutter analyze
 flutter test
 ```
 
+## Deploy (CI/CD)
+
+Os workflows ficam em `.github/workflows/`:
+
+- **`ci.yml`** — em todo PR e push roda `flutter analyze` e `flutter test`.
+  Em push na `main`, gera o build web e publica no GitHub Pages:
+  <https://arthurcoand.github.io/ClimAI/>.
+- **`release.yml`** — **desabilitado por enquanto.** Quando reativado, ao enviar
+  uma tag `v*` compila o APK Android e cria uma Release com `ClimAI-<tag>.apk`
+  anexado (instruções de reativação no topo do arquivo).
+
+Configuração única no GitHub: **Settings → Pages → Source: GitHub Actions**.
+
+O CI usa a revisão do Flutter master definida em `FLUTTER_REF` nos workflows;
+atualize-a quando fizer `flutter upgrade` localmente.
+
 ## Estrutura do projeto
 
 | Caminho | Conteúdo |

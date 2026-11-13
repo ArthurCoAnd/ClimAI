@@ -1,0 +1,76 @@
+name: CI e deploy (GitHub Pages)
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Revisão do Flutter master usada no CI (a mesma do ambiente local).
+# Atualize junto com o `flutter upgrade` local.
+env:
+  FLUTTER_CHANNEL: master
+  FLUTTER_REF: 3d4dafa5b1
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Análise e testes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          flutter-version: ${{ env.FLUTTER_REF }}
+          cache: true
+
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+
+  build-web:
+    name: Build web
+    needs: check
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          flutter-version: ${{ env.FLUTTER_REF }}
+          cache: true
+
+      - run: flutter pub get
+
+      # O site fica em https://<usuario>.github.io/<repositorio>/
+      - run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+
+      # Fallback de SPA: qualquer caminho desconhecido carrega o app.
+      - run: cp build/web/index.html build/web/404.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    name: Publicar no GitHub Pages
+    needs: build-web
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

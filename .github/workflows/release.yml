@@ -1,0 +1,55 @@
+name: Release (APK Android)
+
+# DESABILITADO por enquanto: a parte Android está fora do CI/CD.
+# Para reativar, restaure o gatilho abaixo e remova o `if: false` do job.
+#   push:
+#     tags: ['v*']
+on:
+  workflow_dispatch:
+
+env:
+  FLUTTER_CHANNEL: master
+  FLUTTER_REF: 3d4dafa5b1
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build do APK e criação da Release
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          flutter-version: ${{ env.FLUTTER_REF }}
+          cache: true
+
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+
+      # Tag v1.2.3 -> versionName 1.2.3. O APK é assinado com a chave debug
+      # (configuração padrão do template): serve para sideload, não para a Play Store.
+      - name: Build do APK
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          flutter build apk --release \
+            --build-name "${TAG#v}" \
+            --build-number "${{ github.run_number }}"
+          cp build/app/outputs/flutter-apk/app-release.apk "ClimAI-${TAG}.apk"
+
+      - name: Criar Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: gh release create "$TAG" "ClimAI-${TAG}.apk" --title "ClimAI $TAG" --generate-notes
