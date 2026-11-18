@@ -12,6 +12,7 @@ a previsão horária das próximas 24h e a previsão diária dos próximos 7 dia
 | Busca | [02](02-busca.md) | Pesquisa de municípios e favoritar/desfavoritar |
 | Município | [03](03-pagina-municipio.md) | Clima atual + horária 24h + diária 7 dias |
 | Painel do dia | [03](03-pagina-municipio.md#painel-do-dia) | Horas de um dia escolhido na previsão diária |
+| Widget Android | [05](05-widget-android.md) | Clima atual + próximas 8 horas de um favorito escolhido, na tela inicial |
 
 ## Fluxo de navegação
 ```

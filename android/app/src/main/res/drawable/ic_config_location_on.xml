@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Material Icons "location_on" (Apache 2.0), extraído da fonte MaterialIcons do Flutter. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12.0 2.015625C8.109375 2.015625 5.015625 5.109375 5.015625 9.0C5.015625 14.25 12.0 21.984375 12.0 21.984375C12.0 21.984375 18.984375 14.25 18.984375 9.0C18.984375 5.109375 15.890625 2.015625 12.0 2.015625ZM12.0 11.484375C10.640625 11.484375 9.515625 10.359375 9.515625 9.0C9.515625 7.640625 10.640625 6.515625 12.0 6.515625C13.359375 6.515625 14.484375 7.640625 14.484375 9.0C14.484375 10.359375 13.359375 11.484375 12.0 11.484375Z" />
+</vector>

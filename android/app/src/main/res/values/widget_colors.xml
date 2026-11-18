@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cores do widget da tela inicial. Espelham os tokens de
+     lib/core/theme/glass_theme.dart (GlassColors): mantenha os dois em sincronia. -->
+<resources>
+    <!-- Fundo: bgTop / bgBottom com vidro sobreposto (o widget não tem blur). -->
+    <color name="widget_bg_top">#F22A1803</color>
+    <color name="widget_bg_bottom">#F20D0700</color>
+    <!-- Escolha do município: GlassColors.bgTop / bgBottom / glassFill. -->
+    <color name="widget_bg_top_solid">#FF1F1100</color>
+    <color name="widget_bg_bottom_solid">#FF0D0700</color>
+    <color name="widget_glass">#1FFFFFFF</color>
+    <color name="widget_border">#40FFFFFF</color>
+    <color name="widget_well">#38000000</color>
+    <color name="widget_button">#33FFFFFF</color>
+    <color name="widget_ink">#FFFFF8EC</color>
+    <color name="widget_ink_muted">#FFFFF0CF</color>
+    <!-- Colors.amber.shade300 -->
+    <color name="widget_accent">#FFFFD54F</color>
+    <color name="widget_rain">#FFB3E5FF</color>
+</resources>

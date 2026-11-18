@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../data/api/forecast_api.dart';
 import '../data/favorites_store.dart';
+import '../data/home_widget_updater.dart';
 import '../data/models/city.dart';
 import '../data/models/weather.dart';
 
@@ -19,10 +20,17 @@ class CityWeatherState {
 
 /// Favorites list plus the current weather of each favorite.
 class FavoritesController extends ChangeNotifier {
-  FavoritesController({required this.store, required this.forecastApi});
+  FavoritesController({
+    required this.store,
+    required this.forecastApi,
+    this.homeWidget = const NoopHomeWidgetUpdater(),
+  });
 
   final FavoritesStore store;
   final ForecastApi forecastApi;
+
+  /// Refreshed after every change, since widgets show favorites.
+  final HomeWidgetUpdater homeWidget;
 
   final List<City> _favorites = [];
   final Map<int, CityWeatherState> _weather = {};
@@ -82,6 +90,7 @@ class FavoritesController extends ChangeNotifier {
     _favorites.insert(at, city);
     notifyListeners();
     await store.save(_favorites);
+    await homeWidget.refresh();
     await refresh(city);
   }
 
@@ -93,6 +102,7 @@ class FavoritesController extends ChangeNotifier {
     _weather.remove(city.id);
     notifyListeners();
     await store.save(_favorites);
+    await homeWidget.refresh();
     return index;
   }
 }

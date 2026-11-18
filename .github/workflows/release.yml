@@ -1,11 +1,9 @@
 name: Release (APK Android)
 
-# DESABILITADO por enquanto: a parte Android está fora do CI/CD.
-# Para reativar, restaure o gatilho abaixo e remova o `if: false` do job.
-#   push:
-#     tags: ['v*']
+# Push de uma tag vX.Y.Z -> build do APK e GitHub Release com o APK anexado.
 on:
-  workflow_dispatch:
+  push:
+    tags: ['v*']
 
 env:
   FLUTTER_CHANNEL: master
@@ -17,7 +15,6 @@ permissions:
 jobs:
   release:
     name: Build do APK e criação da Release
-    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,6 +29,14 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
           flutter-version: ${{ env.FLUTTER_REF }}
           cache: true
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*', 'android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
 
       - run: flutter pub get
       - run: flutter analyze

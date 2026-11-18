@@ -1,7 +1,7 @@
 name: clim_ai
 description: "App de clima feito com IA"
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.1.0+1
 
 environment:
   sdk: ^3.15.0-40.0.dev

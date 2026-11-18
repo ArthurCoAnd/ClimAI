@@ -6,6 +6,7 @@ import 'core/theme/glass_theme.dart';
 import 'data/api/forecast_api.dart';
 import 'data/api/geocoding_api.dart';
 import 'data/favorites_store.dart';
+import 'data/home_widget_updater.dart';
 import 'state/favorites_controller.dart';
 import 'ui/home/home_page.dart';
 
@@ -17,6 +18,7 @@ void main() {
     favorites: FavoritesController(
       store: FavoritesStore(),
       forecastApi: forecastApi,
+      homeWidget: HomeWidgetUpdater.forPlatform(),
     )..load(),
     geocodingApi: GeocodingApi(client),
     forecastApi: forecastApi,

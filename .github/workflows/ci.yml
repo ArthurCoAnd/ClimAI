@@ -1,4 +1,4 @@
-name: CI e deploy (GitHub Pages)
+name: CI e deploy (Pages + APK)
 
 on:
   pull_request:
@@ -57,6 +57,43 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
+
+  build-android:
+    name: Build Android (APK)
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          flutter-version: ${{ env.FLUTTER_REF }}
+          cache: true
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*', 'android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - run: flutter pub get
+
+      # APK assinado com a chave debug (padrão do template): serve para sideload.
+      - run: flutter build apk --release --build-number ${{ github.run_number }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClimAI-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 14
 
   deploy:
     name: Publicar no GitHub Pages

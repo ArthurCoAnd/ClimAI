@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget "Próximas 8 horas" (.specs/05-widget-android.md).
+     1/3 superior: município e clima atual em linha (cell_0).
+     2/3 inferiores: as 8 horas seguintes (cell_1..8). Células fixas porque
+     RemoteViews não tem listas horizontais simples. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_background"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:id="@+id/cell_0"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp">
+
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="ClimAI"
+            android:textColor="@color/widget_ink"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/icon_0"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="4dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_weather_cloud_queue" />
+
+            <TextView
+                android:id="@+id/temp_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/widget_ink"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="3dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_weather_umbrella"
+                android:tint="@color/widget_rain" />
+
+            <TextView
+                android:id="@+id/rain_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/widget_rain"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="3dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_weather_water_drop"
+                android:tint="@color/widget_rain" />
+
+            <TextView
+                android:id="@+id/amount_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/widget_rain"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="6dp"
+        android:layout_weight="2"
+        android:background="@drawable/widget_well"
+        android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="6dp"
+        android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/cell_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/hour_1"
+                    style="@style/WidgetHourLabel" />
+
+                <ImageView
+                    android:id="@+id/icon_1"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_weather_cloud_queue" />
+
+                <TextView
+                    android:id="@+id/temp_1"
+                    style="@style/WidgetTemp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="2dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_weather_umbrella"
+                        android:tint="@color/widget_rain" />
+
+                    <TextView
+                        android:id="@+id/rain_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@color/widget_rain"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <!-- No icon: the "mm" unit says what it is, and "0,1 mm" needs the width. -->
+                <TextView
+                    android:id="@+id/amount_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:maxLines="1"
+                    android:textColor="@color/widget_rain"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cell_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/hour_2"
+                    style="@style/WidgetHourLabel" />
+
+                <ImageView
+                    android:id="@+id/icon_2"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_weather_cloud_queue" />
+
+                <TextView
+                    android:id="@+id/temp_2"
+                    style="@style/WidgetTemp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="2dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_weather_umbrella"
+                        android:tint="@color/widget_rain" />
+
+                    <TextView
+                        android:id="@+id/rain_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@color/widget_rain"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <!-- No icon: the "mm" unit says what it is, and "0,1 mm" needs the width. -->
+                <TextView
+                    android:id="@+id/amount_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:maxLines="1"
+                    android:textColor="@color/widget_rain"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cell_3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/hour_3"
+                    style="@style/WidgetHourLabel" />
+
+                <ImageView
+                    android:id="@+id/icon_3"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_weather_cloud_queue" />
+
+                <TextView
+                    android:id="@+id/temp_3"
+                    style="@style/WidgetTemp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="2dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_weather_umbrella"
+                        android:tint="@color/widget_rain" />
+
+                    <TextView
+                        android:id="@+id/rain_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@color/widget_rain"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <!-- No icon: the "mm" unit says what it is, and "0,1 mm" needs the width. -->
+                <TextView
+                    android:id="@+id/amount_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:maxLines="1"
+                    android:textColor="@color/widget_rain"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cell_4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/hour_4"
+                    style="@style/WidgetHourLabel" />
+
+                <ImageView
+                    android:id="@+id/icon_4"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_weather_cloud_queue" />
+
+                <TextView
+                    android:id="@+id/temp_4"
+                    style="@style/WidgetTemp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="2dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_weather_umbrella"
+                        android:tint="@color/widget_rain" />
+
+                    <TextView
+                        android:id="@+id/rain_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@color/widget_rain"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <!-- No icon: the "mm" unit says what it is, and "0,1 mm" needs the width. -->
+                <TextView
+                    android:id="@+id/amount_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:maxLines="1"
+                    android:textColor="@color/widget_rain"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cell_5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/hour_5"
+                    style="@style/WidgetHourLabel" />
+
+                <ImageView
+                    android:id="@+id/icon_5"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_weather_cloud_queue" />
+
+                <TextView
+                    android:id="@+id/temp_5"
+                    style="@style/WidgetTemp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="2dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_weather_umbrella"
+                        android:tint="@color/widget_rain" />
+
+                    <TextView
+                        android:id="@+id/rain_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@color/widget_rain"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <!-- No icon: the "mm" unit says what it is, and "0,1 mm" needs the width. -->
+                <TextView
+                    android:id="@+id/amount_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:maxLines="1"
+                    android:textColor="@color/widget_rain"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cell_6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/hour_6"
+                    style="@style/WidgetHourLabel" />
+
+                <ImageView
+                    android:id="@+id/icon_6"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_weather_cloud_queue" />
+
+                <TextView
+                    android:id="@+id/temp_6"
+                    style="@style/WidgetTemp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="2dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_weather_umbrella"
+                        android:tint="@color/widget_rain" />
+
+                    <TextView
+                        android:id="@+id/rain_6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@color/widget_rain"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <!-- No icon: the "mm" unit says what it is, and "0,1 mm" needs the width. -->
+                <TextView
+                    android:id="@+id/amount_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:maxLines="1"
+                    android:textColor="@color/widget_rain"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cell_7"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/hour_7"
+                    style="@style/WidgetHourLabel" />
+
+                <ImageView
+                    android:id="@+id/icon_7"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_weather_cloud_queue" />
+
+                <TextView
+                    android:id="@+id/temp_7"
+                    style="@style/WidgetTemp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="2dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_weather_umbrella"
+                        android:tint="@color/widget_rain" />
+
+                    <TextView
+                        android:id="@+id/rain_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@color/widget_rain"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <!-- No icon: the "mm" unit says what it is, and "0,1 mm" needs the width. -->
+                <TextView
+                    android:id="@+id/amount_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:maxLines="1"
+                    android:textColor="@color/widget_rain"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cell_8"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/hour_8"
+                    style="@style/WidgetHourLabel" />
+
+                <ImageView
+                    android:id="@+id/icon_8"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_weather_cloud_queue" />
+
+                <TextView
+                    android:id="@+id/temp_8"
+                    style="@style/WidgetTemp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="2dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_weather_umbrella"
+                        android:tint="@color/widget_rain" />
+
+                    <TextView
+                        android:id="@+id/rain_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@color/widget_rain"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <!-- No icon: the "mm" unit says what it is, and "0,1 mm" needs the width. -->
+                <TextView
+                    android:id="@+id/amount_8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:maxLines="1"
+                    android:textColor="@color/widget_rain"
+                    android:textSize="10sp" />
+            </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="@string/widget_loading"
+        android:textColor="@color/widget_ink"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/retry"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/widget_button"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="@string/widget_retry"
+        android:textColor="@color/widget_ink"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+</LinearLayout>

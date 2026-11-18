@@ -105,9 +105,18 @@ Os workflows ficam em `.github/workflows/`:
 - **`ci.yml`** — em todo PR e push roda `flutter analyze` e `flutter test`.
   Em push na `main`, gera o build web e publica no GitHub Pages:
   <https://arthurcoand.github.io/ClimAI/>.
-- **`release.yml`** — **desabilitado por enquanto.** Quando reativado, ao enviar
-  uma tag `v*` compila o APK Android e cria uma Release com `ClimAI-<tag>.apk`
-  anexado (instruções de reativação no topo do arquivo).
+  Em todo PR e push também compila o APK Android, disponível por 14 dias como
+  artifact **`ClimAI-apk`** na execução do workflow (aba Actions).
+- **`release.yml`** — ao enviar uma tag `v*` compila o APK Android e cria uma
+  Release com `ClimAI-<tag>.apk` anexado:
+
+  ```bash
+  git tag v1.0.0
+  git push origin v1.0.0
+  ```
+
+O APK é assinado com a chave debug do template: serve para instalar
+manualmente (sideload), não para publicar na Play Store.
 
 Configuração única no GitHub: **Settings → Pages → Source: GitHub Actions**.
 

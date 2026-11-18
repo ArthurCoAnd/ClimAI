@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_hourly_label">Próximas 8 horas</string>
+    <string name="widget_hourly_description">Clima atual e próximas 8 horas de um município favorito.</string>
+    <string name="widget_configure_title">Escolha o município</string>
+    <string name="widget_configure_subtitle">O widget mostra o clima atual e as próximas 8 horas do favorito escolhido.</string>
+    <string name="widget_configure_empty">Você ainda não tem municípios favoritos. Adicione um no ClimAI para usar o widget.</string>
+    <string name="widget_configure_open_app">Abrir o ClimAI</string>
+    <string name="widget_loading">Carregando…</string>
+    <string name="widget_retry">Tentar novamente</string>
+</resources>
